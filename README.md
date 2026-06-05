@@ -1,7 +1,7 @@
 # Covariant Approximation Averaging for MCMC correlator data
 
 This repository demonstrates the use of **Covariant Approximation Averaging (CAA)** (see e.g. [Blum et al. (2012)](https://arxiv.org/pdf/1208.4349), [Shintani et al. (2014)](https://arxiv.org/abs/1402.0244)) to **real-world Lattice QCD correlator data** obtained from **Markov Chain Monte Carlo (MCMC)** simulations used in my [PhD thesis](http://doi.org/10.5283/epub.76831).
-It includes a jupyter notebook ([view here](https://github.com/spieseba/correlatorCAA/blob/main/CAA.ipynb)) with visualizations and also serves as a practical example application for the [`statpy`](https://github.com/spieseba/statpy) library.
+It includes a jupyter notebook ([view here](https://github.com/spieseba/correlatorCAA/blob/main/CAA.ipynb)) with visualizations and also serves as a practical example application for the v1-legacy version of my [`statpy`](https://github.com/spieseba/statpy/tree/v1-legacy) library.
 
 The folllowing provides a brief introduction to Lattice QCD and the CAA techique.
 
