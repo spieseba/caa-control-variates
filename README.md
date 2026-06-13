@@ -1,9 +1,12 @@
-# Covariant Approximation Averaging for MCMC correlator data
+# Covariant Approximation Averaging (CAA): control variates for variance reduction on MCMC data
 
-This repository demonstrates the use of **Covariant Approximation Averaging (CAA)** (see e.g. [Blum et al. (2012)](https://arxiv.org/pdf/1208.4349), [Shintani et al. (2014)](https://arxiv.org/abs/1402.0244)) to **real-world Lattice QCD correlator data** obtained from **Markov Chain Monte Carlo (MCMC)** simulations used in my [PhD thesis](http://doi.org/10.5283/epub.76831).
-It includes a jupyter notebook ([view here](https://github.com/spieseba/correlatorCAA/blob/main/CAA.ipynb)) with visualizations and also serves as a practical example application for the v1-legacy version of my [`statpy`](https://github.com/spieseba/statpy/tree/v1-legacy) library.
+This repository demonstrates **Covariant Approximation Averaging (CAA)** (see e.g. [Blum et al. (2012)](https://arxiv.org/pdf/1208.4349), [Shintani et al. (2014)](https://arxiv.org/abs/1402.0244)), a **variance-reduction** technique, applied to **real-world Lattice QCD correlator data** from **Markov Chain Monte Carlo (MCMC)** simulations used in my [PhD thesis](http://doi.org/10.5283/epub.76831).
 
-The folllowing provides a brief introduction to Lattice QCD and the CAA techique.
+In statistical terms, CAA is a **[control-variates](https://en.wikipedia.org/wiki/Control_variates)** estimator: it pairs a few expensive, high-precision measurements with many cheap, low-precision approximations to cut the variance of an estimate at fixed compute cost. The [closing section](#connection-to-control-variates) makes this connection explicit.
+
+It includes a Jupyter notebook ([view here](https://github.com/spieseba/caa-control-variates/blob/main/covariant_approximation_averaging.ipynb)) with the full analysis and visualizations, built on my [`statpy`](https://github.com/spieseba/statpy) library.
+
+The following provides a brief introduction to Lattice QCD and the CAA technique.
 
 ---
 
@@ -155,3 +158,30 @@ $$
 As discussed above, computing hadronic correlation functions precisely involves solving large linear systems, which is computationally costly. A natural low-cost approximation is to use low-precision solves (e.g., truncated CG) for the quark propagator. Since the theory is translationally invariant, we can compute these approximations at many different source positions and apply CAA to construct a variance-reduced estimator that remains unbiased.
 
 ---
+
+## Connection to control variates
+
+CAA is a physics-specific instance of [**control variates**](https://en.wikipedia.org/wiki/Control_variates), a general variance-reduction technique used throughout statistics and Monte Carlo estimation.
+
+The control-variates estimator for a target quantity $X$ introduces a second variable $Y$ that is correlated with $X$ and whose mean $\langle Y \rangle$ is known:
+
+$$ X^\star = X - c\,(Y - \langle Y \rangle). $$
+
+This is unbiased for any coefficient $c$, since $\langle X^\star \rangle = \langle X \rangle$, and its variance is reduced when $X$ and $Y$ are strongly correlated.
+
+CAA is exactly this construction, with the identifications:
+
+| control variates | CAA |
+| --- | --- |
+| target $X$ | expensive observable $O$ |
+| control variate $Y$ | cheap approximation $O^\text{(appx)}$ (same source positions as $O$) |
+| known mean $\langle Y \rangle$ | cheaply estimated $O_G^\text{(appx)}$ (averaged over the symmetry orbit) |
+| coefficient $c$ | $1$ |
+
+Substituting these into $X^\star$ gives
+
+$$ O - (O^\text{(appx)} - O_G^\text{(appx)}) = O^\text{(rest)} + O_G^\text{(appx)} = O^\text{(imp)}, $$
+
+which is exactly the improved estimator above. The variance drops precisely when $O$ and $O^\text{(appx)}$ are strongly correlated ($r \approx 1$), matching condition (1).
+
+Two details are specific to CAA. The coefficient is fixed at $c = 1$ rather than tuned to minimize variance, and the control mean $\langle Y \rangle$ is not known in closed form: it is estimated cheaply as $O_G^\text{(appx)}$ from $N_G$ symmetry copies, and the residual variance of that estimate is exactly the $1/N_G$ term in the error formula above (it vanishes as $N_G \to \infty$, recovering textbook control variates). The same telescoping structure underlies [**multilevel Monte Carlo**](https://en.wikipedia.org/wiki/Multilevel_Monte_Carlo_method) estimators.

@@ -1,0 +1,15 @@
+[project]
+name = "caa-control-variates"
+version = "0.1.0"
+description = "Covariant Approximation Averaging analysis of lattice vector correlators."
+requires-python = ">=3.12"
+dependencies = [
+    "statpy",
+    "numpy",
+    "matplotlib",
+    "nbconvert",
+    "ipykernel",
+]
+
+[tool.uv.sources]
+statpy = { path = "../libs/statpy", editable = true }
