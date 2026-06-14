@@ -6,7 +6,7 @@ In statistical terms, CAA is a **[control-variates](https://en.wikipedia.org/wik
 
 It includes a Jupyter notebook ([view here](https://github.com/spieseba/caa-control-variates/blob/main/covariant_approximation_averaging.ipynb)) with the full analysis and visualizations, built on my [`statpy`](https://github.com/spieseba/statpy) library.
 
-The underlying corelator data is not publicly redistributable; the notebook ships with committed outputs so all results are visible without rerunning.
+The underlying correlator data is not publicly redistributable; the notebook ships with committed outputs so all results are visible without rerunning.
 
 ---
 
@@ -36,6 +36,23 @@ The improvement is largest in the **short-distance window** (one to two orders o
 This is a [**control-variates**](https://en.wikipedia.org/wiki/Control_variates) estimator (made explicit in the [closing section](#connection-to-control-variates)), but it departs from the textbook version: the control coefficient is **fixed at $c = 1$** rather than tuned to minimize variance, and the control mean is not known in closed form but estimated cheaply from $N_G$ symmetry copies, leaving a residual $1/N_G$ term in the error.
 
 The [notebook](https://github.com/spieseba/caa-control-variates/blob/main/covariant_approximation_averaging.ipynb) reproduces every number and plot above, including thermalization and autocorrelation checks on the raw MCMC data.
+
+---
+
+## Setup
+
+Prerequisites: Python >= 3.12 and [`uv`](https://docs.astral.sh/uv/getting-started/).
+
+The analysis is built on [`statpy`](https://github.com/spieseba/statpy), which is not published on PyPI. Clone it to a path of your choice and register that checkout as a dependency:
+
+```bash
+git clone https://github.com/spieseba/statpy /path/to/statpy
+git clone https://github.com/spieseba/caa-control-variates
+cd caa-control-variates
+uv add /path/to/statpy   # points the statpy dependency at your local clone and installs everything
+```
+
+`uv add` records the path in your own copy of `pyproject.toml`, so it is intentionally not committed and each clone can point `statpy` wherever you keep it. The `9a` correlator data is not redistributable, so re-running the notebook is not required: it ships with its outputs committed, and all results above are visible without it.
 
 ---
 

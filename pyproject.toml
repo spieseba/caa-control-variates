@@ -1,7 +1,7 @@
 [project]
 name = "caa-control-variates"
-version = "0.1.0"
-description = "Covariant Approximation Averaging analysis of lattice vector correlators."
+version = "1.0.0"
+description = "Demonstration of Covariant Approximation Averaging (CAA) on real-world MCMC correlator data from lattice QCD simulations. Serves also as an usage example of statpy."
 requires-python = ">=3.12"
 dependencies = [
     "statpy",
@@ -12,5 +12,7 @@ dependencies = [
     "pandas>=3.0.3",
 ]
 
-[tool.uv.sources]
-statpy = { path = "../libs/statpy", editable = true }
+# statpy is not published on PyPI. After cloning it locally, register your
+# checkout with `uv add /path/to/statpy` (see the Setup section in README.md);
+# uv writes the path into your local config, so it is intentionally not
+# committed here.
