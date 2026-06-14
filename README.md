@@ -155,7 +155,9 @@ $$
 \langle O^{\text{(rest)}} \rangle + \langle O_G^{\text{(appx)}} \rangle = \langle O \rangle.
 $$
 
-As discussed above, computing hadronic correlation functions precisely involves solving large linear systems, which is computationally costly. A natural low-cost approximation is to use low-precision solves (e.g., truncated CG) for the quark propagator. Since the theory is translationally invariant, we can compute these approximations at many different source positions and apply CAA to construct a variance-reduced estimator that remains unbiased.
+As discussed above, computing hadronic correlation functions precisely involves solving large linear systems, which is computationally costly. A natural low-cost approximation is to use low-precision solves (e.g., truncated CG) for the quark propagator. Such a solve carries a systematic error, but CAA never relies on its accuracy: the same procedure is used everywhere, and translational invariance makes its mean independent of the source position. The sloppy term in $O^\text{(rest)}$ and the one averaged in $O_G^\text{(appx)}$ therefore share the same mean, so the systematic error cancels and the estimator stays unbiased. The approximation only has to be strongly correlated with $O$, which is what reduces the variance.
+
+In terms of cost, an error reduction by a factor $R$ is a variance reduction by $R^2$, i.e. the precision of $R^2$ times more gauge configurations. This is a statistical gain: the realized compute saving is smaller, since the improved estimator still performs the cheap sloppy solves, and approaches $R^2$ only when gauge-field generation dominates the cost (which is usually the case for dynamical simulations).
 
 ---
 
