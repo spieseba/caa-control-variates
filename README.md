@@ -6,7 +6,40 @@ In statistical terms, CAA is a **[control-variates](https://en.wikipedia.org/wik
 
 It includes a Jupyter notebook ([view here](https://github.com/spieseba/caa-control-variates/blob/main/covariant_approximation_averaging.ipynb)) with the full analysis and visualizations, built on my [`statpy`](https://github.com/spieseba/statpy) library.
 
-The following provides a brief introduction to Lattice QCD and the CAA technique.
+The underlying corelator data is not publicly redistributable; the notebook ships with committed outputs so all results are visible without rerunning.
+
+---
+
+## Results
+
+Applied to real correlator data from a single gauge ensemble, the CAA estimator cuts the statistical error on the vector correlator $C^{(\text{ll})}(t)$ by a factor of **6.5–12.7×** across Euclidean time, at no added cost beyond the cheap solves already being computed:
+
+<p align="center">
+  <img src="figures/error_reduction_ll.png" alt="Error reduction for the ll correlator" width="850"/>
+</p>
+
+An error reduction of $R$ is a **variance** reduction of $R^2$: the precision of $R^2$ times more expensive `exact` configurations. The table below reports the median $R$ and $R^2$ per distance window, measured against the `exact_exact` baseline:
+
+| observable | strategy | window | $t/a$ range | error reduction $R$ | effective statistics $R^2$ |
+| --- | --- | --- | --- | --: | --: |
+| $C^{(\text{ll})}$ | CAA | SD | $[1, 4]$ | **11.7** | **136** |
+| $C^{(\text{ll})}$ | CAA | W | $[5, 11]$ | 8.0 | 64 |
+| $C^{(\text{ll})}$ | CAA | LD | $[12, 25]$ | 8.4 | 70 |
+| $C^{(\text{lc})}$ | two-stage CAA | SD | $[1, 4]$ | 5.7 | 33 |
+| $C^{(\text{lc})}$ | two-stage CAA | W | $[5, 11]$ | 4.8 | 23 |
+| $C^{(\text{lc})}$ | two-stage CAA | LD | $[12, 25]$ | 5.2 | 28 |
+| $Z(t) = C^{(\text{lc})}/C^{(\text{ll})}$ | full CAA | plateau | $[9, 19]$ | 0.2 | 0.04 |
+| $Z(t) = C^{(\text{lc})}/C^{(\text{ll})}$ | matched-source CAA | plateau | $[9, 19]$ | 2.2 | 4.9 |
+
+The improvement is largest in the **short-distance window** (one to two orders of magnitude in effective statistics), which is exactly the region targeted in [arXiv 2410.17053](https://inspirehep.net/literature/2841842). The $Z(t)$ rows are a negative result: averaging numerator and denominator over *different* source positions destroys their correlation and makes the estimator **worse** than the baseline ($R < 1$); keeping the source sets matched restores and exceeds it.
+
+This is a [**control-variates**](https://en.wikipedia.org/wiki/Control_variates) estimator (made explicit in the [closing section](#connection-to-control-variates)), but it departs from the textbook version: the control coefficient is **fixed at $c = 1$** rather than tuned to minimize variance, and the control mean is not known in closed form but estimated cheaply from $N_G$ symmetry copies, leaving a residual $1/N_G$ term in the error.
+
+The [notebook](https://github.com/spieseba/caa-control-variates/blob/main/covariant_approximation_averaging.ipynb) reproduces every number and plot above, including thermalization and autocorrelation checks on the raw MCMC data.
+
+---
+
+The remainder of this README gives a brief introduction to Lattice QCD and the CAA technique.
 
 ---
 
